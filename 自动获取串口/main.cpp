@@ -1,66 +1,32 @@
 ﻿#include <Windows.h>
 #include <iostream>
-#include <tchar.h>
+
 using namespace std;
 
-bool openport(TCHAR * portname);
+bool openport(const char * portname);
 
 int main()
 {
 	cout << "Serial Port: ";
 	string com = "com";
 	
-	if (openport(_T("com1")))
+	for (int i = 0; i < 10; i++)
 	{
-		cout << "com1" << endl;
+		string port = "com";
+		char a[5];
+		sprintf_s(a, "%d", i);
+		port += a;
+		bool open = openport(port.c_str());
+		if (open)
+		{
+			cout << port.c_str() << " open scuessful" << endl;
+		}
 	}
-	if (openport(_T("com2")))
-	{
-		cout << "com2" << endl;
-	}
-	if (openport(_T("com3")))
-	{
-		cout << "com3" << endl;
-	}
-	if (openport(_T("com4")))
-	{
-		cout << "com4" << endl;
-	}
-	if (openport(_T("com5")))
-	{
-		cout << "com5" << endl;
-	}
-
-	if (openport(_T("com6")))
-	{
-		cout << "com6" << endl;
-	}
-	
-	if (openport(_T("com7")))
-	{
-		cout << "com7" << endl;
-	}
-	if (openport(_T("com8")))
-	{
-		cout << "com8" << endl;
-	}
-
-	if (openport(_T("com9")))
-	{
-		cout << "com9" << endl;
-	}
-	
-	if (openport(_T("com10")))
-	{
-		cout << "com10" << endl;
-	}
-
-
 
 	system("pause");
 	return 0;
 }
-bool openport(TCHAR * portname)
+bool openport(const char * portname)
 //"char *" 类型的实参与 "LPCWSTR" 类型的形参不兼容	(方法： 用TCHAR代替char)
 {
 	HANDLE hComm;

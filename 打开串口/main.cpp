@@ -24,7 +24,7 @@ int main()
 }
 
 bool openport(TCHAR * portname)
-//"char *" 类型的实参与 "LPCWSTR" 类型的形参不兼容	(方法： 用TCHAR代替char)
+//"char *" 类型的实参与 "LPCWSTR" 类型的形参不兼容	(方法： 用TCHAR代替char)（方法：设为多字节）
 {
 	HANDLE hComm;
 	hComm = CreateFile(portname,
