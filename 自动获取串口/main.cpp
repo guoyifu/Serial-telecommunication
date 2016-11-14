@@ -9,8 +9,8 @@ int main()
 {
 	cout << "Serial Port: ";
 	string com = "com";
-	
-	for (int i = 0; i < 10; i++)
+
+	for (int i = 0; i < 11; i++)
 	{
 		string port = "com";
 		char a[5];
@@ -20,6 +20,11 @@ int main()
 		if (open)
 		{
 			cout << port.c_str() << " open scuessful" << endl;
+			break;
+		}
+		else
+		{
+			cout << port.c_str() << " open failed" << endl;
 		}
 	}
 
