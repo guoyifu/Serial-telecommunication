@@ -49,7 +49,7 @@ int main()
 			//PURGE_TXCLEAR	  清除输出缓冲区
 			//PURGE_RXCLEAR	  清除输入缓冲区
 			WriteChar((BYTE*)"please send data now", 20);
-			printf("received data:\n");
+			printf("recived data:\n");
 
 			cout << "recive data: ";
 			ReciveChar();
@@ -60,7 +60,7 @@ int main()
 			cout << port.c_str() << " open failed" << endl;
 		}
 	}
-
+	cout << endl;
 
 	system("pause");
 	return 0;
@@ -166,6 +166,12 @@ void ReciveChar()
 	DWORD dwError = 0;
 	DWORD BytesRead = 0;
 	char RXBuff;
+
+	bool _case = 1;
+	char sentenses[100];
+	/*memset(sentenses, 0, sizeof(sentenses));*/
+	int i = 0;
+
 	for (;;)
 	{
 		bResult = ClearCommError(hComm, &dwError, &comstat);
@@ -176,6 +182,9 @@ void ReciveChar()
 		{
 			continue;
 		}
+		
+		
+		
 		if (bRead)
 		{
 			bRead = ReadFile
@@ -189,31 +198,58 @@ void ReciveChar()
 				&m_ov		//pointer to m_ov structer
 
 			);				//重叠操作时，该参数指向一个OVERLAPPED结构，同步操作时，该参数为BULL
-			cout << RXBuff;
-			if (!bResult)	//当ReadFile和WriteFile返回FALSE时，不一定就是操作失败
-							//线程应该调用GetLastError函数分析返回结果
+			//cout << RXBuff;
+			
+			
+
+			
+			
+			if(RXBuff != '\n' || i>100)
 			{
-				switch (dwError = GetLastError())
+				sentenses[i] = RXBuff;
+				i++;
+				if (!bResult)	//当ReadFile和WriteFile返回FALSE时，不一定就是操作失败
+								//线程应该调用GetLastError函数分析返回结果
 				{
-				case ERROR_IO_PENDING:
-				{
-					bRead = FALSE;
-					break;
+					switch (dwError = GetLastError())
+					{
+					case ERROR_IO_PENDING:
+					{
+						bRead = FALSE;
+						break;
+					}
+					default:
+						break;
+					}
 				}
-				default:
-					break;
+				else
+				{
+					bRead = TRUE;
+				}  //close if(bRead)
+				if (!bRead)
+				{
+					bRead = TRUE;
+					bResult = GetOverlappedResult(hComm, &m_ov, &BytesRead, TRUE);
 				}
 			}
 			else
 			{
-				bRead = TRUE;
-			}  //close if(bRead)
-			if (!bRead)
-			{
-				bRead = TRUE;
-				bResult = GetOverlappedResult(hComm, &m_ov, &BytesRead, TRUE);
-			}
+				_case = false;
+			}		
+
+			
 		}
+		if (_case==false)
+		{
+			break;
+		}
+	}
+	/*int len = strlen(sentenses);
+	int len_ = sizeof(sentenses);*/
+
+	for (int j = 0; j < i; j++)
+	{
+		cout << sentenses[j];
 	}
 }
 bool WriteChar(const BYTE * m_szWriteBuffer, DWORD m_nToSend)
