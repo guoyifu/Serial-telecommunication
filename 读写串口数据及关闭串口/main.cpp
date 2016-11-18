@@ -49,7 +49,7 @@ int main()
 			//PURGE_TXCLEAR	  清除输出缓冲区
 			//PURGE_RXCLEAR	  清除输入缓冲区
 			WriteChar((BYTE*)"please send data now", 20);
-			printf("recived data:\n");
+			
 
 			cout << "recive data: ";
 			ReciveChar();
@@ -169,7 +169,7 @@ void ReciveChar()
 
 	bool _case = 1;
 	char sentenses[100];
-	/*memset(sentenses, 0, sizeof(sentenses));*/
+	
 	int i = 0;
 
 	for (;;)
@@ -198,12 +198,8 @@ void ReciveChar()
 				&m_ov		//pointer to m_ov structer
 
 			);				//重叠操作时，该参数指向一个OVERLAPPED结构，同步操作时，该参数为BULL
-			//cout << RXBuff;
-			
-			
-
-			
-			
+			//cout << RXBuff;   //测试语句
+					
 			if(RXBuff != '\n' || i>100)
 			{
 				sentenses[i] = RXBuff;
@@ -244,12 +240,17 @@ void ReciveChar()
 			break;
 		}
 	}
-	/*int len = strlen(sentenses);
+	/*int len = strlen(sentenses);      //测试语句
 	int len_ = sizeof(sentenses);*/
 
 	for (int j = 0; j < i; j++)
 	{
 		cout << sentenses[j];
+	}
+	string msg = "";
+	for (int j = 0; j < i; j++)
+	{
+		msg += sentenses[j];
 	}
 }
 bool WriteChar(const BYTE * m_szWriteBuffer, DWORD m_nToSend)
